@@ -125,6 +125,8 @@ def factorized_model(hcount, hspectrum, bad_channel, gamma):
         hcount.SetBinContent(i + 1, content[i])
     return hcount
 
+
+#The Main block
 if __name__ == '__main__':
     import os, sys
     sys.path.append(os.path.join(os.environ['ROOTSYS'], 'lib'))

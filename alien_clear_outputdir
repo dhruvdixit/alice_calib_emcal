@@ -1,11 +1,11 @@
 #!/bin/sh
 
 alien_macro="runCalibEmcal.C"
-if grep -q terminate "$alien_macro"; then
+if grep -q run_mode.*terminate "$alien_macro"; then
     echo "error: $alien_macro is in mode \`terminate'"
     exit 1
 fi
 
-output_dir="/alice/cern.ch/user/y/ylai/workdir/\
+output_dir="/alice/cern.ch/user/d/ddixit/workdir/\
 $(sed "/SetGridOutputDir/!d;s/.*(\"//;s/\").*//" < "$alien_macro")"
 exec alien_rmdir "$output_dir"
