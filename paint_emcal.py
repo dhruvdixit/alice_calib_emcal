@@ -3,6 +3,7 @@
 if __name__ != '__main__':
     import math, array, ROOT
 
+#Sets up ROOT
 def set_root_style():
     ROOT.gROOT.SetStyle("Plain")
     ROOT.gStyle.SetCanvasColor(ROOT.kWhite)
