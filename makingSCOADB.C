@@ -1,10 +1,11 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include "TGeoManager.h"
 
 using namespace std;
 
-void makingSCOADB(string inputFile, TString runPeriod)
+void makingSCOADB(string inputFile, Int_t runNumber)
 {
 
   
@@ -17,13 +18,6 @@ void makingSCOADB(string inputFile, TString runPeriod)
   //Int_t fNMaxColsAbs = 2*fNMaxCols;
   //Int_t fNMaxRowsAbs = Int_t (nSM/2)*fNMaxRows; //multiply by number of supermodules
 
-  TH1C* h[20];
-
-  //Bad channel ID vector
-  vector<int> deadChn;
-  vector<int> warmChn;
-  vector<int> badChn;
-  
   cout << "Make histos" << endl;
   
   TString histoName[nSM];

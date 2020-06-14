@@ -81,7 +81,7 @@ def factorized_model(hcount, hspectrum, bad_channel, gamma,hChi):
 
                 if a != 0:
                     # scale_15_17, scale_17_20, scale_20_50 = [((a * r[1])**(gamma + 1) / (gamma + 1) - (a * r[0])**(gamma + 1) / (gamma + 1)) / (r[1]**(gamma + 1) / (gamma + 1) - r[0]**(gamma + 1) / (gamma + 1)) for r in ((1.5, 17), (1.7, 2.0), (2.0, 5.0))]
-                    chi_square = []
+                    chi_square = []#chi[0] = after, chi[1] = before
                     if len(plot_cell_id) >= 1 and i == plot_cell_id[0]:
                         histogram_model = [ROOT.TH1D(hspectrum[i]) for j in range(2)]
                         for h in histogram_model:

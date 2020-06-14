@@ -6,7 +6,8 @@ void accessCalibrations(TString runPeriod, int cellID)
   Int_t ism = locInfo/10000;
   int ieta = (locInfo%10000)/100;
   int iphi = (locInfo%10000)%100;
-  TString s = ""
+  TString s = "";
+  
 }
 
 double GettingCellAmplitude(int cell_id)

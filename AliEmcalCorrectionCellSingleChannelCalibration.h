@@ -19,7 +19,8 @@
  * @author Gustavo Conesa, LPSC-Grenoble, AliEMCALTenderSupply several mods.
  * @author Raymond Ehlers <raymond.ehlers@yale.edu>, Yale University, centralize EMCal corrections using components
  * @author James Mulligan <james.mulligan@yale.edu>, Yale University, centralize EMCal corrections using components
- * @date Jul 8, 2016
+ * @author Dhruv Dixit <dhruvdixit@berkeley.edu>, University of California, Berkeley, AliEmcalCorrectionCellSingleChannelCalibration
+ * @date March 17, 2019
  */
 
 class AliEmcalCorrectionCellSingleChannelCalibration : public AliEmcalCorrectionComponent {
@@ -33,13 +34,12 @@ class AliEmcalCorrectionCellSingleChannelCalibration : public AliEmcalCorrection
   Bool_t Run();
   Bool_t CheckIfRunChanged();
   
-protected:
-  TH1F* fCellEnergyDistBefore;        //!<! cell energy distribution, before energy calibration
-  TH1F* fCellEnergyDistAfter;         //!<! cell energy distribution, after energy calibration
+ protected:
+  TH1F* fCellSingleChannelEnergyDistBefore;        //!<! cell energy distribution, before energy calibration
+  TH1F* fCellSingleChannelEnergyDistAfter;         //!<! cell energy distribution, after energy calibration
 
 private:
   Int_t                  InitRecalib();
-  Int_t                  InitRunDepRecalib();
   
   // Change to false if experts
   Bool_t                 fUseAutomaticRecalib;       ///< On by default the check in the OADB of the energy recalibration

@@ -7,7 +7,7 @@ void accessingBadChannelMaps()//TString fBasePath)
   gStyle->SetOptStat(0);
   //......................................................
   //..Get the OADB information
-  TString fBasePath="/home/dhruv/alice/AliPhysics/OADB/EMCAL";
+  TString fBasePath="/home/dhruv/Downloads";
   
   AliOADBContainer *cont=new AliOADBContainer("");
   cont->InitFromFile(Form("%s/EMCALBadChannels.root",fBasePath.Data()),"AliEMCALBadChannels");
@@ -105,7 +105,7 @@ void accessingBadChannelMaps()//TString fBasePath)
 
   plot2D_Bad_OADB->Draw("colz");
   bool val = true;
-  for(int i = 0; i < warmChn.size(); i++)
+  /*for(int i = 0; i < warmChn.size(); i++)
     {
       int temp = 0;
       if(i == 0)
@@ -176,7 +176,7 @@ void accessingBadChannelMaps()//TString fBasePath)
       
       if(i == deadChn.size()-1)
 	cout << "]" << endl;
-    }//dead
+    }//dead*/
   
 }//end accesingBadChannelMaps
 
