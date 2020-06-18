@@ -8,7 +8,7 @@ from ROOT import gROOT, gSystem, gStyle
 
 #gStyle.SetOptStat(0)
 
-compare_file = 'allNew'
+compare_file = 'list3'
 
 if compare_file == 'allNew':
     import bad_channel_lhc15o_all_new
@@ -34,9 +34,9 @@ if compare_file == 'allBut2':
 
 if compare_file == 'list3':
     import bad_channel_lhc15o_3
-    import bad_channel_lhc15o_mine31
+    import bad_channel_lhc15o_mine3
     bad_all = sorted(bad_channel_lhc15o_3.bad_all + bad_channel_lhc15o_mine3.hot)
-    filename = 'lhc15o_list3_chiBeforeAfter.txt'
+    filename = 'old_bad_channel/lhc15o_list3_chiBeforeAfter.txt'
     xaxisTitle = 'c3'
     
 nCells = 17664
@@ -47,14 +47,18 @@ fhCellCoeff = TH1F("fhCellCoeff","fhCellCoeff",nCells+10,0,nCells+10)# cellID+1 
 
 h2 = TH1D('h2', 'Coeff plot for list 2', 400, -0.5, 3.5)
 h3 = TH1D('h3', 'Coeff plot for '+compare_file, 400, -0.5, 3.5)
+h3.GetXaxis().SetTitle(xaxisTitle)
 
 cB = TH1D('cB', 'Chi Square before the correction for ' + xaxisTitle, 16100, -0.5, 16095.5)
 cB.GetXaxis().SetTitle('#chi^{2}')
-cA = TH1D('cA', 'Chi Square after the correction' + xaxisTitle, 890, -0.5, 889.5)
+cA = TH1D('cA', 'Chi Square after the correction ' + xaxisTitle, 890, -0.5, 889.5)
 cA.GetXaxis().SetTitle('#chi^{2}')
 
-rat = TH1D('rat', 'Differece between lists 2 and '+ xaxisTitle, 300, -1.5, 1.5)
+rat = TH1D('rat', 'Difference between lists 2 and '+ xaxisTitle, 300, -1.5, 1.5)
 rat.GetXaxis().SetTitle('c2-'+ xaxisTitle)
+ratAbs = TH1D('ratAbs', 'Difference between lists 2 and '+ xaxisTitle, 300, -0.05, 2.95)
+ratAbs.GetXaxis().SetTitle('c2-'+ xaxisTitle)
+
 
 corrG = TH2D('corrG', 'Correlation between the two lists: good channels only', 400, -0.5, 3.5, 400, -0.5, 3.5)
 corrG.GetXaxis().SetTitle('c2')
@@ -71,7 +75,7 @@ corrB = TH2D('corrB', 'Correlation between the two lists: bad channels only', 40
 
 list2_dict = {}
 list3_dict = {}
-with open('lhc15o_list2_chiBeforeAfter.txt','r') as list2_txt:
+with open('old_bad_channel/lhc15o_list2_chiBeforeAfter.txt','r') as list2_txt:
     for line2 in list2_txt:
         cell_id2, eb2, yb2, coeff2, chiA2, chiB2 = [float(i) for i in line2.split()]
         cell_id2 = int(cell_id2)
@@ -102,7 +106,7 @@ with open(filename, 'r') as list3_txt:
     
 bad_channels = []
 missing_channels = []
-outliers = []#1391, 2163, 2350, 2790, 4416, 6049, 6519, 7507, 8283, 9003, 9892, 10474, 11867, 13967, 14209, 14240, 14241, 14242, 14243, 14247, 14248, 14250, 14251, 14252, 14253, 14288, 14291, 14292, 14293, 14294, 14295, 14296, 14297, 14298, 14299, 14301, 14381, 14386, 14390, 14392, 16686, 17305, 17445, 17460, 17464, 17527]
+outliers = [324, 328, 759, 2210, 2228, 2389, 2624, 2787, 3051, 3176, 3307, 3353, 3397, 3403, 3876, 3916, 3962, 4100, 4236, 4597, 5201, 5698, 6064, 8724, 9275, 9357, 9941, 10196, 10759, 14241, 14242, 14243, 14247, 14248, 14251, 14252, 14253, 14291, 14292, 14293, 14294, 14295, 14296, 14297, 14298, 14299, 14301, 14386, 14390, 14392, 17597]
 chiA_min = 9999.9
 chiB_min = 9999.9
 chiA_max = 0.0
@@ -136,14 +140,15 @@ for key in list2_dict.keys():
 
                 cA.Fill(float(l3[3]))
                 cB.Fill(float(l3[4]))
-
+                corrG.Fill(c2, c3)
+                rat.Fill(c2-c3)
+                ratAbs.Fill(abs(c2-c3))
             else:
                 outliers.append(key)
 
                     
-            if abs(c2-c3) <= 0.2:
-                corrG.Fill(c2, c3)
-                rat.Fill(c2-c3)
+            #if abs(c2-c3) <= 0.2:
+                
     else:
         #print key, 'is missing list3_dict'
         missing_channels.append(key)
@@ -200,9 +205,9 @@ corrG.Draw('colz')
 # lnG.Draw()
 # lCorr.Draw()
 
-# cb = TCanvas('cb', 'cb', 600, 400)
-# cb.SetLogz()
-# corrB.Draw('colz')
+cb = TCanvas('cb', 'cb', 600, 400)
+cb.SetLogz()
+corrB.Draw('colz')
 # lnB = TLine(1,0,1,3)
 # lnB.Draw()
 # lCorr.Draw()
@@ -220,9 +225,10 @@ coeff_cvns = TCanvas('coeff_cvns','coeff_cvns',600,400)
 #h3.SetLineColor(kBlue)
 #h2.Draw()
 h3.Draw()
+h3.Fit('gaus','','',0.8,1.2)
 
-#myFile = TFile("chiBnAForAll.root", "RECREATE")
-#if myFile.IsOpen :
+# myFile = TFile("allNewvslist2.root", "RECREATE")
+# if myFile.IsOpen :
 #    corrG.Write("corrG")
 #    corrG_EMCAL.Write("corrG_EMCAL")
 #    corrG_DCAL.Write("corrG_DCAL")
@@ -230,7 +236,7 @@ h3.Draw()
 #    rat.Write("rat")
 #    cA.Write("cA")
 #    cB.Write("cB")
-#myFile.Close()
+# myFile.Close()
 
 
 

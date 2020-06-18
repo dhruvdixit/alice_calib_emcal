@@ -3,8 +3,7 @@
 
 #define RUN_PERIOD(x, y) ((x) << 5) + ((y) - 'a')
 
-void runCalibEmcal(const char *run_mode = "full",
-				   const int lhc_run_period = RUN_PERIOD(16, 'r'))
+void runCalibEmcal(const char *run_mode = "full", const int lhc_run_period = RUN_PERIOD(16, 'r'))
 /*/////////////////////////////////////////////////////////////////////////////////
 Run Mode:
 - "test": runs the code on a single node, and with a small set of events,
@@ -217,7 +216,6 @@ Run period(number, letter)
 
 		-1
 	};
-
 	
 	const int run_number_lhc16q[] = {
 	  //Globally Good
@@ -257,6 +255,18 @@ Run period(number, letter)
 	  };
 
 	
+	const int run_number_lhc17p[] = {
+	  
+	        282343, 282342, 282341, 282340, 282314, 282313, 282312,
+		282307, 282306, 282305, 282304, 282303, 282302, 282247,
+		282230, 282229, 282227, 282224, 282206, 282189, 282147,
+		282146, 282127, 282126, 282125, 282123, 282122, 282119,
+		282118, 282099, 282098, 282078, 282051, 282031, 282030,
+		282025,
+	  
+		-1
+	};
+
 	const int *run_number;
 
 	plugin->SetGridDataDir(Form(
@@ -315,7 +325,15 @@ Run period(number, letter)
 	        plugin->SetDataPattern("muon_calo_pass1/*/AliESDs.root");
 	        run_number = run_number_lhc16t;
 	        break;
+		
+	case RUN_PERIOD(17, 'p'):
+	        plugin->SetDataPattern("muon_calo_pass1/*/AliESDs.root");
+		run_number = run_number_lhc17h;
+		break;
+
+
 	}
+	
 
 
 
