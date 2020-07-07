@@ -4,10 +4,11 @@
 #define RUN_PERIOD(x, y) ((x) << 5) + ((y) - 'a')
 
 void runCalibEmcal(const char *run_mode = "full",
-				   const int lhc_run_period = RUN_PERIOD(16, 'q'))
+				   const int lhc_run_period = RUN_PERIOD(17, 'p'))
 {
 	gROOT->ProcessLine(".include $ROOTSYS/include");
 	gROOT->ProcessLine(".include $ALICE_ROOT/include");
+	gROOT->ProcessLine(".include $ALICE_PHYSICS/include");
 
 	// Load base root libraries
 	gSystem->Load("libTree");
@@ -34,11 +35,11 @@ void runCalibEmcal(const char *run_mode = "full",
 	AliAnalysisAlien *plugin =
 		new AliAnalysisAlien("pluginCalibEmcal");
 
-	// plugin->AddIncludePath("-I. -I$ROOTSYS/include -I$ALICE_ROOT "
-	// "-I$ALICE_ROOT/include -I$ALICE_PHYSICS/include");
+	plugin->AddIncludePath("-I. -I$ROOTSYS/include -I$ALICE_ROOT "
+			       "-I$ALICE_ROOT/include -I$ALICE_PHYSICS/include");
 
-	plugin->SetGridWorkingDir("workdir");
-	plugin->SetGridOutputDir("outputdir");
+	plugin->SetGridWorkingDir("workdir_calib");
+	plugin->SetGridOutputDir("outputdir_17p_1run");
 	plugin->SetAliPhysicsVersion("v5-08-14-01-1");
 	plugin->SetAdditionalLibs(
 		"AliAnalysisTaskCalibEmcal.h "
@@ -173,12 +174,23 @@ void runCalibEmcal(const char *run_mode = "full",
 
 	const int run_number_lhc17p[] = {
 	  
-	        282343, 282342, 282341, 282340, 282314, 282313, 282312,
-		282307, 282306, 282305, 282304, 282303, 282302, 282247,
-		282230, 282229, 282227, 282224, 282206, 282189, 282147,
-		282146, 282127, 282126, 282125, 282123, 282122, 282119,
-		282118, 282099, 282098, 282078, 282051, 282031, 282030,
+	  //    282343, 282342, 282341, 282340, 282314, 282313, 282312,
+	  //	282307, 282306, 282305, 282304, 282303, 282302, 282247,
+	  //	282230, 282229, 282227, 282224, 282206, 282189, 282147,
+	  //	282146, 282127, 282126, 282125, 282123, 282122, 282119,
+	  //	282118, 282099, 282098, 282078, 282051, 282031, 282030,
 		282025,
+	  
+		-1
+	};
+
+	const int run_number_lhc18d[] = {
+	  
+	        286014, 286018, 286025, 286026, 286027, 286030, 286064,
+		286124, 286127, 286129, 286130, 286159, 286198, 286201,
+		286202, 286203, 286229, 286230, 286231, 286254, 286255,
+		286256, 286257, 286258, 286261, 286263, 286282, 286308,
+		286309, 286310, 286311, 286314, 286348, 286349,
 	  
 		-1
 	};
@@ -228,7 +240,11 @@ void runCalibEmcal(const char *run_mode = "full",
 		break;
 	case RUN_PERIOD(17, 'p'):
 	        plugin->SetDataPattern("muon_calo_pass1/*/AliESDs.root");
-		run_number = run_number_lhc17h;
+		run_number = run_number_lhc17p;
+		break;
+	case RUN_PERIOD(18, 'd'):
+	        plugin->SetDataPattern("muon_calo_pass1/*/AliESDs.root");
+		run_number = run_number_lhc18d;
 		break;
 
 	}
