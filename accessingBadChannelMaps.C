@@ -7,7 +7,7 @@ void accessingBadChannelMaps()//TString fBasePath)
   gStyle->SetOptStat(0);
   //......................................................
   //..Get the OADB information
-  TString fBasePath="/home/dhruv/Downloads";
+  TString fBasePath="/home/ddixit/localOADB/OADB/EMCAL";
   
   AliOADBContainer *cont=new AliOADBContainer("");
   cont->InitFromFile(Form("%s/EMCALBadChannels.root",fBasePath.Data()),"AliEMCALBadChannels");
@@ -15,7 +15,7 @@ void accessingBadChannelMaps()//TString fBasePath)
   //......................................................
   //..Initialize EMCal/DCal geometry
   vector<int> RunIdVec;
-  RunIdVec.push_back(282365);
+  RunIdVec.push_back(280285);
   cout << RunIdVec.at(0) << endl;
   AliCalorimeterUtils* fCaloUtils = new AliCalorimeterUtils();
   //..Create a dummy event for the CaloUtils
@@ -105,7 +105,7 @@ void accessingBadChannelMaps()//TString fBasePath)
 
   plot2D_Bad_OADB->Draw("colz");
   bool val = true;
-  /*for(int i = 0; i < warmChn.size(); i++)
+  for(int i = 0; i < warmChn.size(); i++)
     {
       int temp = 0;
       if(i == 0)

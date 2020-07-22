@@ -16,9 +16,10 @@ def set_root_style():
 def multipanel_pad(canvas, pad_layout_unscaled, margin = None):
     pad = []
     pad_layout = pad_layout_unscaled
+    print (pad_layout_unscaled[0])
     for i in range(2):
         s = sum(pad_layout_unscaled[i])
-        for j in range(len(pad_layout_unscaled[i])):
+        for j in range(len(list(pad_layout_unscaled[i]))):
             pad_layout[i][j] /= s
     pad_layout_1_reversed = list(reversed(pad_layout[1]))
     if margin == None:
@@ -30,10 +31,10 @@ def multipanel_pad(canvas, pad_layout_unscaled, margin = None):
         left_margin, right_margin, top_margin, bottom_margin = magin
     lr = left_margin + right_margin
     tb = top_margin + bottom_margin
-    for i in range(len(pad_layout[0])):
+    for i in range(len(list(pad_layout[0]))):
         x0 = sum(pad_layout[0][:i]) * (1 - lr)
         x1 = lr + sum(pad_layout[0][:i+1]) * (1 - lr)
-        for j in reversed(range(len(pad_layout[1]))):
+        for j in reversed(range(len(list(pad_layout[1])))):
             y0 = sum(pad_layout_1_reversed[:j]) * (1 - tb)
             y1 = tb + sum(pad_layout_1_reversed[:j+1]) * (1 - tb)
             name = 'pad%d' % len(pad)
@@ -75,7 +76,7 @@ def to_sm_ieta_iphi(n):
     iphi = (n1 / 2) % nphi;
     return sm, ieta, iphi
 
-def to_eta_phi(sm, ieta, iphi, ieta_int = None):
+def to_eta_phi(smFloat, ieta, iphi, ieta_int = None):
     if ieta_int == None:
         ieta_int = round(ieta)
     coeff_eta = [
@@ -186,6 +187,8 @@ def to_eta_phi(sm, ieta, iphi, ieta_int = None):
         ieta_mod_2 = ieta_int % 2
     else:
         ieta_mod_2 = ieta % 2
+    sm = int(smFloat)
+    #print ("super module", int(sm))
     eta = coeff_eta[sm][0] + coeff_eta[sm][1] * iphi + \
           coeff_eta[sm][2] * iphi * iphi + \
           coeff_eta[sm][3] * ieta + \
@@ -220,6 +223,8 @@ def alice_emcal_canvas_pad(application_name, canvas_width = 1680):
     canvas.SetRightMargin(right_margin)
     canvas.SetTopMargin(top_margin)
     canvas.SetBottomMargin(bottom_margin)
+    print ("goes to alice_emcal_canvas_pad in paint_emcal return")
+    print ("pad_layout", pad_layout)
     return canvas, multipanel_pad(canvas, pad_layout)
 
 def update(canvas, pad, root_histogram, root_histogram_index = 0,
