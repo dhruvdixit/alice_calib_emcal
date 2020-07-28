@@ -1,4 +1,6 @@
 #include <vector>
+#include <algorithm>
+#include <set>
 
 using namespace std;
 
@@ -15,7 +17,12 @@ void accessingBadChannelMaps()//TString fBasePath)
   //......................................................
   //..Initialize EMCal/DCal geometry
   vector<int> RunIdVec;
-  RunIdVec.push_back(280285);
+  RunIdVec.push_back(290290);
+  RunIdVec.push_back(290588);
+  RunIdVec.push_back(290841);
+  RunIdVec.push_back(291188);
+  RunIdVec.push_back(291942);
+  RunIdVec.push_back(292397);
   cout << RunIdVec.at(0) << endl;
   AliCalorimeterUtils* fCaloUtils = new AliCalorimeterUtils();
   //..Create a dummy event for the CaloUtils
@@ -42,6 +49,10 @@ void accessingBadChannelMaps()//TString fBasePath)
   vector<int> deadChn;
   vector<int> warmChn;
   vector<int> badChn;
+
+  set<int> deadChnSet;
+  set<int> warmChnSet;
+  set<int> badChnSet;
   
   TString histoName;
   histoName = Form("2DChannelMap_Flag_Bad");
@@ -87,16 +98,19 @@ void accessingBadChannelMaps()//TString fBasePath)
 		    {
 		      plot2D_Bad_OADB->SetBinContent(cellColumnAbs,cellRowAbs,3);
 		      warmChn.push_back(cellID);
+		      warmChnSet.insert(cellID);
 		    }
 		  if(h[iSM]->GetBinContent(column,row) == 2)//..bad
 		    {
 		      plot2D_Bad_OADB->SetBinContent(cellColumnAbs,cellRowAbs,2);
 		      badChn.push_back(cellID);
+		      badChnSet.insert(cellID);
 		    }
 		  if(h[iSM]->GetBinContent(column,row)==1)//..dead
 		    {
 		      plot2D_Dead_OADB->SetBinContent(cellColumnAbs,cellRowAbs,1);
 		      deadChn.push_back(cellID);
+		      deadChnSet.insert(cellID);
 		    }
 		}//end for over rows
 	    }//end for over cols
@@ -105,7 +119,27 @@ void accessingBadChannelMaps()//TString fBasePath)
 
   plot2D_Bad_OADB->Draw("colz");
   bool val = true;
-  for(int i = 0; i < warmChn.size(); i++)
+  cout << "warm=[";
+  for (set<int>::iterator it = warmChnSet.begin(); it != warmChnSet.end(); ++it)
+    {
+      cout << *it << ", ";
+    }
+  cout << "]" << endl;
+
+  cout << "bad=[";
+  for (set<int>::iterator it = badChnSet.begin(); it != badChnSet.end(); ++it)
+    {
+      cout << *it << ", ";
+    }
+  cout << "]" << endl;
+
+  cout << "dead=[";
+  for (set<int>::iterator it = deadChnSet.begin(); it != deadChnSet.end(); ++it)
+    {
+      cout << *it << ", ";
+    }
+  cout << "]" << endl;
+  /*for(int i = 0; i < warmChn.size(); i++)
     {
       int temp = 0;
       if(i == 0)

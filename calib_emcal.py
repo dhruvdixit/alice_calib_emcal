@@ -54,9 +54,9 @@ def factorized_model(hcount, hspectrum, bad_channel, gamma,hChi):
     function_inner = []
 
     if print_coeffs:
-        file_coeff = open("lhc17oo_coeff.txt","w")
+        file_coeff = open("lhc18m_coeff.txt","w")
     if print_chis:
-        file_chis = open("lhc17o_chiBeforeAfter.txt","w")
+        file_chis = open("lhc18m_chiBeforeAfter.txt","w")
 
     print ("plot_cell_id:", plot_cell_id, ncell)
     for i in plot_cell_id + list(range(ncell)):
@@ -71,7 +71,7 @@ def factorized_model(hcount, hspectrum, bad_channel, gamma,hChi):
         if content[i] > 0:
             a = 0
             if print_warm:
-                if (not i in bad_channel_lhc17o.bad_all) and (content[i] - content_model) > 1000:
+                if (not i in bad_channel_lhc18m.bad_all) and (content[i] - content_model) > 1000:
                     sys.stdout.write('%d, ' % i)
             elif content_model > 0:
                 a = (content_model / content[i])**(-1.0 / gamma) #a is set as the correction
@@ -121,13 +121,13 @@ def factorized_model(hcount, hspectrum, bad_channel, gamma,hChi):
                     hChi[0].Fill(chi_square[0])
                     hChi[1].Fill(chi_square[1])
                        
-                    #print (i, i in bad_channel_lhc17o.bad_all and 1 or 0, i in bad_channel_lhc17o_mine.hot and 1 or 0, a, chi_square[0], chi_square[1])
+                    #print (i, i in bad_channel_lhc18m.bad_all and 1 or 0, i in bad_channel_lhc18m_mine.hot and 1 or 0, a, chi_square[0], chi_square[1])
 
                     if print_chis:
-                        file_chis.write("%d %d %d %f %f %f\n" %(i, i in bad_channel_lhc17o.bad_all and 1 or 0, i in bad_channel_lhc17o_mine.hot and 1 or 0, a, chi_square[0], chi_square[1])) 
+                        file_chis.write("%d %d %d %f %f %f\n" %(i, i in bad_channel_lhc18m.bad_all and 1 or 0, i in bad_channel_lhc18m_mine.hot and 1 or 0, a, chi_square[0], chi_square[1])) 
 
                     
-                    if chi_square[0] / chi_square[1] < 1 and i in bad_channel_lhc17o.bad_all:
+                    if chi_square[0] / chi_square[1] < 1 and i in bad_channel_lhc18m.bad_all:
                         #a = chi_square[0] / chi_square[1]    
                         #if a < 1.5 and chi_square[0] < 20:
                         if chi_square[0] < 10:
@@ -162,7 +162,7 @@ def factorized_model(hcount, hspectrum, bad_channel, gamma,hChi):
     if print_chis:
         file_chis.close()
     if print_coeffs:
-        file_coeffs.close()
+        file_coeff.close()
     if print_warm:
         sys.stdout.write('\n')
     for i in range(ncell):
@@ -233,10 +233,10 @@ if __name__ == '__main__':
 
 
     #importing the bad channel lists
-    import bad_channel_lhc17o
-    import bad_channel_lhc17o_mine
+    import bad_channel_lhc18m
+    import bad_channel_lhc18m_mine
     #import lhc15o_list2_coeffs
-    bad_all = sorted(bad_channel_lhc17o.bad_all + bad_channel_lhc17o_mine.hot)#list of all bad and hot channels for the run set
+    bad_all = sorted(bad_channel_lhc18m.bad_all + bad_channel_lhc18m_mine.hot)#list of all bad and hot channels for the run set
     function = []
 
     #histograms to obtaina  chisqr distribution

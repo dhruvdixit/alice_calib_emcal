@@ -71,12 +71,14 @@ void makingCoeffComparison()//TString fBasePath)
 
   TH1F* hCoeff15o = new TH1F("hCoeff15o", "hCoeff15o", 400, -0.5, 3.5);
   TH1F* hCoeff17q = new TH1F("hCoeff17q", "hCoeff17q", 400, -0.5, 3.5);
-  TH1F* hCoeff17o = new TH1F("hCoeff17o", "hCoeff17o", 400, -0.5, 3.5); 
+  TH1F* hCoeff17o = new TH1F("hCoeff17o", "hCoeff17o", 400, -0.5, 3.5);
+  TH1F* hCoeff18m = new TH1F("hCoeff18m", "hCoeff18m", 400, -0.5, 3.5); 
 
   const int ncell = 17664;
   double coeff15o[ncell] = {0.0};
   double coeff17q[ncell] = {0.0};
   double coeff17o[ncell] = {0.0};
+  double coeff18m[ncell] = {0.0};
 
   int cellID, badChn, badChnMine;
   double a, chiA, chiB;
@@ -101,6 +103,12 @@ void makingCoeffComparison()//TString fBasePath)
     coeff17o[cellID] = a;
   }
 
+  ifstream inFile18m("lhc18m_coeff.txt");
+  while(inFile18m >> cellID >> a){
+    //cout << cellID << "\t" << a << endl;
+    coeff18m[cellID] = a;
+  }
+
   for(int i = 0; i < ncell; i++){
     //cout << coeff15o[i] << "\t" << coeff17q[i] << endl;
     if ((coeff15o[i] == 0) || (coeff17q[i] == 0) || (coeff17o[i] == 0)) continue;
@@ -119,6 +127,8 @@ void makingCoeffComparison()//TString fBasePath)
       hCoeff17q->Fill(coeff17q[i]);
     if (coeff17o[i] != 0)
       hCoeff17o->Fill(coeff17o[i]);
+    if (coeff18m[i] != 0)
+      hCoeff18m->Fill(coeff18m[i]);
   }
 
   hCoeffHist15o17q->SetTitle("; 15o coefficients; 17q coefficients");
@@ -132,6 +142,7 @@ void makingCoeffComparison()//TString fBasePath)
   hCoeff15o->SetTitle("; a (lhc15o);counts");hCoeff15o->SetLineColor(kRed);hCoeff15o->SetMarkerColor(kRed);hCoeff15o->SetMarkerStyle(kFullCircle);
   hCoeff17q->SetTitle("; a (lhc17q);counts");hCoeff17q->SetLineColor(kBlue);hCoeff17q->SetMarkerColor(kBlue);hCoeff17q->SetMarkerStyle(kFullCircle);
   hCoeff17o->SetTitle("; a (lhc17o);counts");hCoeff17o->SetLineColor(kGreen);hCoeff17o->SetMarkerColor(kGreen);hCoeff17o->SetMarkerStyle(kFullCircle);
+  hCoeff18m->SetTitle("; a (lhc18m);counts");hCoeff18m->SetLineColor(kMagenta);hCoeff18m->SetMarkerColor(kMagenta);hCoeff18m->SetMarkerStyle(kFullCircle);
   
   TCanvas* cHist15o17q = new TCanvas("cHist15o17q", "cHist15o17q", 800, 600);
   cHist15o17q ->SetLogz();
@@ -173,13 +184,18 @@ void makingCoeffComparison()//TString fBasePath)
 
   TCanvas* cCoeffs = new TCanvas("cCoeffs", "cCoeffs", 800, 600);
   cCoeffs->SetLogy();
+  hCoeff15o->SetTitle(";calibration coefficient (a); counts");
   hCoeff15o->Draw("");
   hCoeff17q->Draw("same");
   hCoeff17o->Draw("same");
+  hCoeff18m->Draw("same");
+  
   TLegend* lCoeffs = new TLegend(0.6, 0.6, 0.8, 0.8);
+  lCoeffs->SetBorderSize(0);
   lCoeffs->AddEntry(hCoeff15o, "15o, 5 TeV Pb-Pb");
   lCoeffs->AddEntry(hCoeff17o, "17o, 13 TeV pp");
   lCoeffs->AddEntry(hCoeff17q, "17q, 5 TeV pp");
+  lCoeffs->AddEntry(hCoeff18m, "18m, 13 TeV pp");
   lCoeffs->Draw("same");
   
 }//end makeEtaPhiPlots
