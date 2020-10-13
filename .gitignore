@@ -1,7 +1,4 @@
 *.d
-*.eps
-*.pdf
-*.png
 *.pyc
 *.so
 *~
